@@ -37,7 +37,7 @@ class Title(models.Model):
 
 
 class Review(models.Model):
-    title_id = models.ForeignKey(
+    title = models.ForeignKey(
         Title,
         related_name='reviews',
         on_delete=models.CASCADE
@@ -54,17 +54,20 @@ class Review(models.Model):
         db_index=True
     )
 
+    class Meta:
+        unique_together = ('title', 'author')
+
     def __str__(self):
         return self.text[:10]
 
 
 class Comment(models.Model):
-    review_id = models.ForeignKey(
+    review = models.ForeignKey(
         Review,
         related_name='comments',
         on_delete=models.CASCADE
     )
-    text = models.TextField
+    text = models.TextField()
     author = models.ForeignKey(
         User,
         related_name='comments',
