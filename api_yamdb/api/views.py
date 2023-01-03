@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404
+from django_filters.rest_framework import DjangoFilterBackend
 
 from rest_framework import filters, permissions, viewsets
 from rest_framework.pagination import LimitOffsetPagination
@@ -14,6 +15,11 @@ from .serializers import (CommentSerializer, CategorySerializer,
 class TitleViewSet(viewsets.ModelViewSet):
     queryset = Title.objects.all()
     serializer_class = TitleSerializer
+    pagination_class = LimitOffsetPagination
+    # permission_classes = (AdminOrRead,)
+    filterset_fields = ('category__slug', 'genre__slug', 'name', 'year')
+
+
 
 
 class CommentViewSet(viewsets.ModelViewSet):
@@ -21,6 +27,7 @@ class CommentViewSet(viewsets.ModelViewSet):
     serializer_class = CommentSerializer
     pagination_class = LimitOffsetPagination
     # permission_classes = (OwnerOrRead, AdminOrRead, ModerOrRead)
+    filter_backends = (DjangoFilterBackend,)
 
     def get_queryset(self):
         title_id = self.kwargs.get('title_id')
