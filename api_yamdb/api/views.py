@@ -1,8 +1,7 @@
-from django.shortcuts import render
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404
-from django_filters.rest_framework import DjangoFilterBackend
 
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, permissions, viewsets
 from rest_framework.pagination import LimitOffsetPagination
 
@@ -20,8 +19,6 @@ class TitleViewSet(viewsets.ModelViewSet):
     filterset_fields = ('category__slug', 'genre__slug', 'name', 'year')
 
 
-
-
 class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
@@ -32,7 +29,11 @@ class CommentViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         title_id = self.kwargs.get('title_id')
         review_id = self.kwargs.get('review_id')
-        new_queryset = Comment.objects.filter(review__title=title_id, review=review_id)
+        new_queryset = Comment.objects.filter(
+            # review__title=get_object_or_404(Title, id=title_id),
+            # review__title=title_id,
+            review=get_object_or_404(Review, id=review_id, title=title_id)
+        )
         return new_queryset
 
     def perform_create(self, serializer):
@@ -42,11 +43,13 @@ class CommentViewSet(viewsets.ModelViewSet):
         serializer.save(author=self.request.user, review=review)
 
     def perform_update(self, serializer):
-        # Тут или проверка на авторство или ничего, если описан permission_class
+        # Тут или проверка на авторство или ничего,
+        # если описан permission_class
         return super(ReviewViewSet, self).perform_update(serializer)
 
     def perform_destroy(self, serializer):
-        # Тут или проверка на авторство или ничего, если описан permission_class
+        # Тут или проверка на авторство или ничего,
+        # если описан permission_class
         return super(ReviewViewSet, self).perform_destroy(serializer)
 
 
@@ -68,6 +71,7 @@ class ReviewViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         title_id = self.kwargs.get('title_id')
+        get_object_or_404(Title, id=title_id)
         new_queryset = Review.objects.filter(title=title_id)
         return new_queryset
 
@@ -77,9 +81,11 @@ class ReviewViewSet(viewsets.ModelViewSet):
         serializer.save(author=self.request.user, title=title)
 
     def perform_update(self, serializer):
-        # Тут или проверка на авторство или ничего, если описан permission_class
+        # Тут или проверка на авторство или ничего,
+        # если описан permission_class
         return super(ReviewViewSet, self).perform_update(serializer)
 
     def perform_destroy(self, serializer):
-        # Тут или проверка на авторство или ничего, если описан permission_class
+        # Тут или проверка на авторство или ничего, если описан
+        # permission_class
         return super(ReviewViewSet, self).perform_destroy(serializer)
