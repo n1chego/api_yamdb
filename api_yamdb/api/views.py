@@ -1,21 +1,19 @@
-from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404
-
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import filters, permissions, viewsets
+from rest_framework import viewsets
 from rest_framework.pagination import LimitOffsetPagination
 
 from titles.models import Comment, User, Category, Genre, Title, Review
 from .serializers import (CommentSerializer, CategorySerializer,
                           GenreSerializer, TitleSerializer,
                           ReviewSerializer)
+from .permissions import AdminOrRead, OwnerOrRead, ModerOrRead
 
 
 class TitleViewSet(viewsets.ModelViewSet):
     queryset = Title.objects.all()
     serializer_class = TitleSerializer
     pagination_class = LimitOffsetPagination
-    # permission_classes = (AdminOrRead,)
     filterset_fields = ('category__slug', 'genre__slug', 'name', 'year')
 
 
@@ -23,7 +21,7 @@ class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
     pagination_class = LimitOffsetPagination
-    # permission_classes = (OwnerOrRead, AdminOrRead, ModerOrRead)
+    permission_classes = (OwnerOrRead, AdminOrRead, ModerOrRead)
     filter_backends = (DjangoFilterBackend,)
 
     def get_queryset(self):
@@ -41,13 +39,9 @@ class CommentViewSet(viewsets.ModelViewSet):
         serializer.save(author=self.request.user, review=review)
 
     def perform_update(self, serializer):
-        # Тут или проверка на авторство или ничего,
-        # если описан permission_class
         return super(ReviewViewSet, self).perform_update(serializer)
 
     def perform_destroy(self, serializer):
-        # Тут или проверка на авторство или ничего,
-        # если описан permission_class
         return super(ReviewViewSet, self).perform_destroy(serializer)
 
 
@@ -65,7 +59,7 @@ class ReviewViewSet(viewsets.ModelViewSet):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
     pagination_class = LimitOffsetPagination
-    # permission_classes = (OwnerOrRead, AdminOrRead, ModerOrRead)
+    permission_classes = (OwnerOrRead, AdminOrRead, ModerOrRead)
 
     def get_queryset(self):
         title_id = self.kwargs.get('title_id')
@@ -79,11 +73,7 @@ class ReviewViewSet(viewsets.ModelViewSet):
         serializer.save(author=self.request.user, title=title)
 
     def perform_update(self, serializer):
-        # Тут или проверка на авторство или ничего,
-        # если описан permission_class
         return super(ReviewViewSet, self).perform_update(serializer)
 
     def perform_destroy(self, serializer):
-        # Тут или проверка на авторство или ничего, если описан
-        # permission_class
         return super(ReviewViewSet, self).perform_destroy(serializer)
