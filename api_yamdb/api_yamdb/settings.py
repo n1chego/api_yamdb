@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     'django_filters',
     'api',
     'titles',
+    'django_filters',
 ]
 
 MIDDLEWARE = [
