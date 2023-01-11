@@ -4,6 +4,9 @@ from django.db import IntegrityError
 from rest_framework import serializers
 from rest_framework.serializers import ValidationError
 from rest_framework.validators import UniqueTogetherValidator
+from django.contrib.auth import get_user_model
+from rest_framework.generics import get_object_or_404
+from rest_framework_simplejwt.tokens import RefreshToken
 
 from titles.models import Comment, User, Category, Genre, Title, Review
 
@@ -80,3 +83,50 @@ class ReviewSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 {'error': 'Нельзя оставлять два ревью на одно произведение.'})
         return review
+
+class TokenSerializer(serializers.Serializer):
+    username = serializers.CharField(required=True)
+    confirmation_code = serializers.CharField(required=True)
+    def validate(self, attrs):
+        user = get_object_or_404(
+            get_user_model(), username=attrs.get('username')
+        )
+        if user.confirmation_code != attrs.get('confirmation_code'):
+            raise serializers.ValidationError(
+                'Неверный код подтверждения'
+            )
+        refresh = RefreshToken.for_user(user)
+        data = {'access_token': str(refresh.access_token)}
+        return data
+
+
+class UserSignUpSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = ('email', 'username')
+
+    def validate(self, attrs):
+        super().validate(attrs)
+        if attrs.get('username') == 'me':
+            raise serializers.ValidationError(
+                'Неыерное имя пользователя'
+            )
+        return attrs
+
+
+class UserSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = (
+            'username', 'email', 'first_name', 'last_name', 'bio', 'role'
+        )
+
+    def nonadmin_update(self, instance, validated_data):
+        validated_data.pop('role', None)
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+        return instance
+        
