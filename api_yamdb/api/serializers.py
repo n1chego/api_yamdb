@@ -11,29 +11,6 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from titles.models import Comment, User, Category, Genre, Title, Review
 
 
-class TitleSerializer(serializers.ModelSerializer):
-    rating = serializers.SerializerMethodField()
-
-    def validate(self, data):
-        current_year = dt.datetime.today().year
-        if not (data['year'] <= current_year):
-            raise ValidationError('Год не подходит')
-        return data
-
-    class Meta:
-        fields = '__all__'
-        model = Title
-
-    def get_rating(self, obj):
-        rating = 0
-        reviews = Review.objects.filter(title=obj)
-        if reviews:
-            for review in reviews:
-                rating += review.score
-            return rating // reviews.count()
-        return rating
-
-
 class CommentSerializer(serializers.ModelSerializer):
     author = serializers.SlugRelatedField(
         read_only=True, slug_field='username'
@@ -131,4 +108,51 @@ class UserSerializer(serializers.ModelSerializer):
         return instance
 
 
-        
+class TitleViewSerializer(serializers.ModelSerializer):
+    genre = GenreSerializer(many=True, required=False)
+    category = CategorySerializer(required=True, )
+    rating = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Title
+        fields = (
+            'id', 'name', 'year', 'rating', 'description', 'genre', 'category'
+        )
+        read_only_fields = (
+            'id', 'name', 'year', 'rating', 'description', 'genre', 'category'
+        )
+
+    def get_rating(self, obj):
+        rating = 0
+        reviews = Review.objects.filter(title=obj)
+        if reviews:
+            for review in reviews:
+                rating += review.score
+            return rating // reviews.count()
+        return rating
+
+
+class TitleWriteSerializer(serializers.ModelSerializer):
+    genre = serializers.SlugRelatedField(
+        slug_field='slug',
+        queryset=Genre.objects.all(),
+        many=True,
+        required=False,
+    )
+
+    category = serializers.SlugRelatedField(
+        slug_field='slug',
+        queryset=Category.objects.all(),
+        many=False,
+        required=True
+    )
+
+    def validate_year(self, data):
+        current_year = dt.datetime.today().year
+        if not (data['year'] <= current_year):
+            raise serializers.ValidationError('Год не подходит')
+        return data
+
+    class Meta:
+        fields = ('id', 'name', 'year', 'description', 'genre', 'category')
+        model = Title
