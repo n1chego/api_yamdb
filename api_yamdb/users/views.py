@@ -1,7 +1,6 @@
 import secrets
 import string
 
-from django.contrib.auth import get_user_model
 from django.core.mail import send_mail
 from rest_framework import status
 from rest_framework.decorators import action
@@ -19,6 +18,7 @@ from api.serializers import (
                            UserSerializer,
                            UserSignUpSerializer,
                         )
+from .models import User
 
 
 class UserSignUpView(CreateAPIView):
@@ -28,7 +28,7 @@ class UserSignUpView(CreateAPIView):
         serializer.is_valid(raise_exception=True)
         alphabet = string.ascii_letters + string.digits
         code = ''.join(secrets.choice(alphabet) for i in range(8))
-        user, _ = get_user_model().objects.get_or_create(
+        user, _ = User.objects.get_or_create(
             username=serializer.data.get('username'),
             email=serializer.data.get('email'),
             confirmation_code=code
@@ -44,12 +44,13 @@ class UserSignUpView(CreateAPIView):
 
 
 class UserViewSet(ModelViewSet):
-    queryset = get_user_model().objects.all()
+    queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = (AdminOrRead,)
     lookup_field = 'username'
     search_fields = ('username',)
     pagination_class = LimitOffsetPagination
+
 
     @action(
         ['GET', 'PATCH'], permission_classes=(IsAuthenticated,),

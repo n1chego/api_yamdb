@@ -110,7 +110,7 @@ class UserSignUpSerializer(serializers.ModelSerializer):
         super().validate(attrs)
         if attrs.get('username') == 'me':
             raise serializers.ValidationError(
-                'Неыерное имя пользователя'
+                'Неверное имя пользователя'
             )
         return attrs
 
@@ -129,4 +129,6 @@ class UserSerializer(serializers.ModelSerializer):
             setattr(instance, attr, value)
         instance.save()
         return instance
+
+
         
