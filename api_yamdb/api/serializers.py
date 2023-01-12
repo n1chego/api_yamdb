@@ -147,11 +147,11 @@ class TitleWriteSerializer(serializers.ModelSerializer):
         required=True
     )
 
-    def validate_year(self, data):
+    def validate_year(self, year):
         current_year = dt.datetime.today().year
-        if not (data['year'] <= current_year):
+        if not (year <= current_year):
             raise serializers.ValidationError('Год не подходит')
-        return data
+        return year
 
     class Meta:
         fields = ('id', 'name', 'year', 'description', 'genre', 'category')
