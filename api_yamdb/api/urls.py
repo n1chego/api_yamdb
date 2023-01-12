@@ -1,16 +1,13 @@
 from django.urls import include, path
 
 from rest_framework.routers import SimpleRouter
-from rest_framework_simplejwt.views import (
-    TokenObtainPairView,
-    TokenRefreshView,
-)
 
 from .views import (
     CategoryViewSet, CommentViewSet,
     GenreViewSet, ReviewViewSet, TitleViewSet
 )
 
+from users.views import UserSignUpView, TokenView, UserViewSet
 
 app_name = 'api'
 
@@ -41,23 +38,21 @@ router_v1.register(
     basename='reviews'
 )
 
+router_v1.register('users', UserViewSet, basename='users')
+
+
+auth_urls = [
+    path(
+        'auth/token/', TokenView.as_view(),
+        name='token'
+    ),
+    path(
+        'auth/signup/', UserSignUpView.as_view(),
+        name='sign_up'
+    ),
+]
 
 urlpatterns = [
-    path(
-        'v1/',
-        include(router_v1.urls)
-    ),
-    path(
-        'v1/token/',
-        TokenObtainPairView.as_view(),
-        name='token_obtain_pair'
-    ),
-    path(
-        'v1/token/refresh/',
-        TokenRefreshView.as_view(),
-        name='token_refresh'
-    ),
-    # path('v1/', include('djoser.urls')),
-    # JWT-эндпоинты, для управления JWT-токенами:
-    # path('v1/', include('djoser.urls.jwt')),
+    path('v1/', include(router_v1.urls)),
+    path('v1/', include(auth_urls)),
 ]
