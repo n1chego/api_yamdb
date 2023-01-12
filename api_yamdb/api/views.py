@@ -1,16 +1,16 @@
-from django.shortcuts import render
-from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 
-from rest_framework import filters, permissions, viewsets
+from rest_framework import filters, viewsets
 from rest_framework.pagination import LimitOffsetPagination
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
-from titles.models import Comment, User, Category, Genre, Title, Review
-from .permissions import AdminOrRead
+from .permissions import AdminOrRead, ModerOrRead, OwnerOrRead
 from .serializers import (CommentSerializer, CategorySerializer,
                           GenreSerializer, TitleWriteSerializer,
                           ReviewSerializer, TitleViewSerializer)
+from titles.models import Category, Genre, Title
+from reviews.models import Comment, Review
 
 
 class TitleViewSet(viewsets.ModelViewSet):
@@ -31,12 +31,15 @@ class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
     pagination_class = LimitOffsetPagination
-    # permission_classes = (OwnerOrRead, AdminOrRead, ModerOrRead)
+    permission_classes = (IsAuthenticatedOrReadOnly,)
 
     def get_queryset(self):
         title_id = self.kwargs.get('title_id')
         review_id = self.kwargs.get('review_id')
-        new_queryset = Comment.objects.filter(review__title=title_id, review=review_id)
+        new_queryset = Comment.objects.filter(
+            review__title=title_id,
+            review=review_id
+        )
         return new_queryset
 
     def perform_create(self, serializer):
@@ -46,12 +49,10 @@ class CommentViewSet(viewsets.ModelViewSet):
         serializer.save(author=self.request.user, review=review)
 
     def perform_update(self, serializer):
-        # Тут или проверка на авторство или ничего, если описан permission_class
-        return super(ReviewViewSet, self).perform_update(serializer)
+        return super(CommentViewSet, self).perform_update(serializer)
 
     def perform_destroy(self, serializer):
-        # Тут или проверка на авторство или ничего, если описан permission_class
-        return super(ReviewViewSet, self).perform_destroy(serializer)
+        return super(CommentViewSet, self).perform_destroy(serializer)
 
 
 class GenreViewSet(viewsets.ModelViewSet):
@@ -78,7 +79,7 @@ class ReviewViewSet(viewsets.ModelViewSet):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
     pagination_class = LimitOffsetPagination
-    # permission_classes = (OwnerOrRead, AdminOrRead, ModerOrRead)
+    permission_classes = (IsAuthenticatedOrReadOnly,)
 
     def get_queryset(self):
         title_id = self.kwargs.get('title_id')
@@ -91,9 +92,7 @@ class ReviewViewSet(viewsets.ModelViewSet):
         serializer.save(author=self.request.user, title=title)
 
     def perform_update(self, serializer):
-        # Тут или проверка на авторство или ничего, если описан permission_class
         return super(ReviewViewSet, self).perform_update(serializer)
 
     def perform_destroy(self, serializer):
-        # Тут или проверка на авторство или ничего, если описан permission_class
         return super(ReviewViewSet, self).perform_destroy(serializer)

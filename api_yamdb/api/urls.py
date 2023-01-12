@@ -6,8 +6,8 @@ from .views import (
     CategoryViewSet, CommentViewSet,
     GenreViewSet, ReviewViewSet, TitleViewSet
 )
-
 from users.views import UserSignUpView, TokenView, UserViewSet
+
 
 app_name = 'api'
 
@@ -51,6 +51,7 @@ auth_urls = [
         name='sign_up'
     ),
 ]
+
 
 urlpatterns = [
     path('v1/', include(router_v1.urls)),
