@@ -1,14 +1,15 @@
 import datetime as dt
+from django.contrib.auth import get_user_model
 from django.db import IntegrityError
 
 from rest_framework import serializers
-from rest_framework.serializers import ValidationError
-from rest_framework.validators import UniqueTogetherValidator
-from django.contrib.auth import get_user_model
 from rest_framework.generics import get_object_or_404
+from rest_framework.validators import UniqueTogetherValidator
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from titles.models import Comment, User, Category, Genre, Title, Review
+from titles.models import Category, Genre, Title
+from reviews.models import Comment, Review
+from users.models import User
 
 
 class CommentSerializer(serializers.ModelSerializer):
@@ -25,7 +26,7 @@ class CommentSerializer(serializers.ModelSerializer):
 class CategorySerializer(serializers.ModelSerializer):
 
     class Meta:
-        fields = '__all__'
+        fields = ('name', 'slug')
         model = Category
 
 
@@ -61,9 +62,11 @@ class ReviewSerializer(serializers.ModelSerializer):
                 {'error': 'Нельзя оставлять два ревью на одно произведение.'})
         return review
 
+
 class TokenSerializer(serializers.Serializer):
     username = serializers.CharField(required=True)
     confirmation_code = serializers.CharField(required=True)
+
     def validate(self, attrs):
         user = get_object_or_404(
             get_user_model(), username=attrs.get('username')
@@ -139,7 +142,6 @@ class TitleWriteSerializer(serializers.ModelSerializer):
         many=True,
         required=False,
     )
-
     category = serializers.SlugRelatedField(
         slug_field='slug',
         queryset=Category.objects.all(),

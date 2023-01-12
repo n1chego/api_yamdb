@@ -14,15 +14,16 @@ from rest_framework.pagination import LimitOffsetPagination
 from api_yamdb import settings
 from api.permissions import AdminOrRead
 from api.serializers import (
-                           TokenSerializer,
-                           UserSerializer,
-                           UserSignUpSerializer,
-                        )
+    TokenSerializer,
+    UserSerializer,
+    UserSignUpSerializer,
+)
 from .models import User
 
 
 class UserSignUpView(CreateAPIView):
     serializer_class = UserSignUpSerializer
+
     def create(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -51,7 +52,6 @@ class UserViewSet(ModelViewSet):
     search_fields = ('username',)
     pagination_class = LimitOffsetPagination
 
-
     @action(
         ['GET', 'PATCH'], permission_classes=(IsAuthenticated,),
         detail=False, url_path='me'
@@ -71,6 +71,7 @@ class UserViewSet(ModelViewSet):
                 request.user, serializer.validated_data
             )
         return Response(serializer.data, status=status.HTTP_200_OK)
+
 
 class TokenView(TokenViewBase):
     serializer_class = TokenSerializer

@@ -1,6 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
+
 class User(AbstractUser):
 
     USER = 'user'
@@ -16,7 +17,10 @@ class User(AbstractUser):
     first_name = models.CharField(
         max_length=150, blank=True, verbose_name='Имя'
     )
-    bio = models.TextField(blank=True, verbose_name='информация о пользователе')
+    bio = models.TextField(
+        blank=True,
+        verbose_name='информация о пользователе'
+    )
     role = models.CharField(
         max_length=30, choices=ROLE_CHOICES, default=USER, verbose_name='Роль'
     )
