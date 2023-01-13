@@ -33,7 +33,7 @@ class CategorySerializer(serializers.ModelSerializer):
 class GenreSerializer(serializers.ModelSerializer):
 
     class Meta:
-        fields = '__all__'
+        fields = ('name', 'slug')
         model = Genre
 
 
@@ -112,7 +112,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class TitleViewSerializer(serializers.ModelSerializer):
-    genre = GenreSerializer(many=True, required=False)
+    genre = GenreSerializer(many=True, required=True)
     category = CategorySerializer(required=True, )
     rating = serializers.SerializerMethodField()
 
@@ -132,7 +132,7 @@ class TitleViewSerializer(serializers.ModelSerializer):
             for review in reviews:
                 rating += review.score
             return rating // reviews.count()
-        return rating
+        return None
 
 
 class TitleWriteSerializer(serializers.ModelSerializer):
@@ -140,7 +140,7 @@ class TitleWriteSerializer(serializers.ModelSerializer):
         slug_field='slug',
         queryset=Genre.objects.all(),
         many=True,
-        required=False,
+        required=True,
     )
     category = serializers.SlugRelatedField(
         slug_field='slug',
