@@ -5,32 +5,51 @@ class AdminOrRead(BasePermission):
 
     def has_permission(self, request, view):
         user = request.user
-        return (user.is_authenticated
-                and (user.is_admin or user.is_superuser))
+        return (
+            user.is_authenticated
+            and (user.is_admin or user.is_superuser)
+            or request.method in SAFE_METHODS
+        )
 
     def has_object_permission(self, request, view, obj):
         user = request.user
-        return (user.is_authenticated
-                and (user.is_admin or user.is_superuser))
+        return (
+            user.is_authenticated
+            and (user.is_admin or user.is_superuser)
+            or request.method in SAFE_METHODS
+        )
 
 
-class ModerOrRead(BasePermission):
+class ModerOrRead(AdminOrRead):
 
     def has_permission(self, request, view):
         user = request.user
-        return user.is_authenticated and user.is_moderator
+        return (
+            super().has_permission(request, view)
+            or user.is_authenticated and user.is_moderator
+            or request.method in SAFE_METHODS
+        )
 
     def has_object_permission(self, request, view, obj):
         user = request.user
-        return user.is_authenticated and user.is_moderator
+        return (
+            super().has_object_permission(request, view, obj)
+            or user.is_authenticated and user.is_moderator
+        )
 
 
-class OwnerOrRead(BasePermission):
+class OwnerOrRead(ModerOrRead):
     def has_permission(self, request, view):
         user = request.user
-        return (user.is_authenticated and user.is_user
-                or request.method in SAFE_METHODS)
+        return (
+            super().has_permission(request, view)
+            or user.is_authenticated and user.is_user
+            or request.method in SAFE_METHODS
+        )
 
     def has_object_permission(self, request, view, obj):
         user = request.user
-        return obj.author == user or request.method in SAFE_METHODS
+        return (
+            super().has_object_permission(request, view, obj)
+            or obj.author == user or request.method in SAFE_METHODS
+        )
