@@ -26,5 +26,3 @@ class Command(BaseCommand):
 
         comments = Command_comments()
         comments.handle()
-
-
