@@ -54,6 +54,7 @@ class OwnerOrRead(ModerOrRead):
             or obj.author == user or request.method in SAFE_METHODS
         )
 
+
 class IsAdmin(BasePermission):
     def has_permission(self, request, view):
         return request.user.is_authenticated and request.user.is_admin

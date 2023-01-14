@@ -30,10 +30,13 @@ class UserSignUpView(CreateAPIView):
         code = ''.join(secrets.choice(alphabet) for i in range(8))
         message = (f'Ваш код подтверждения: {code}')
         try:
-            user = User.objects.get(email=request.data.get('email'), username = request.data.get('username'))
+            user = User.objects.get(email=request.data.get('email'),
+                                    username=request.data.get('username')
+                                    )
         except ObjectDoesNotExist:
             user = None
-        if User.objects.filter(email=request.data.get('email'), username = request.data.get('username')).exists():
+        if User.objects.filter(email=request.data.get('email'),
+                               username=request.data.get('username')).exists():
             send_mail(
                 subject='Регистрация на сайте',
                 message=message,
@@ -91,7 +94,6 @@ class UserViewSet(ModelViewSet):
                 request.user, serializer.validated_data
             )
         return Response(serializer.data, status=status.HTTP_200_OK)
-        
 
 
 class TokenView(TokenViewBase):
