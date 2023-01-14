@@ -1,3 +1,5 @@
+from http import HTTPStatus
+
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 
@@ -5,6 +7,7 @@ from rest_framework import filters, viewsets
 from rest_framework.pagination import PageNumberPagination
 
 from .filters import TitleFilter
+from .mixins import MixinViewSet
 from .permissions import AdminOrRead, OwnerOrRead
 from .serializers import (CommentSerializer, CategorySerializer,
                           GenreSerializer, TitleWriteSerializer,
@@ -57,7 +60,7 @@ class CommentViewSet(viewsets.ModelViewSet):
         return super(CommentViewSet, self).perform_destroy(serializer)
 
 
-class GenreViewSet(viewsets.ModelViewSet):
+class GenreViewSet(MixinViewSet):
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
     pagination_class = PageNumberPagination
@@ -67,7 +70,7 @@ class GenreViewSet(viewsets.ModelViewSet):
     lookup_field = 'slug'
 
 
-class CategoryViewSet(viewsets.ModelViewSet):
+class CategoryViewSet(MixinViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     pagination_class = PageNumberPagination
