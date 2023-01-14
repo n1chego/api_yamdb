@@ -2,8 +2,10 @@ from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 
 from rest_framework import filters, viewsets
+from rest_framework.filters import SearchFilter
 from rest_framework.pagination import PageNumberPagination
 
+from .filters import TitleFilter
 from .permissions import AdminOrRead, OwnerOrRead
 from .serializers import (CommentSerializer, CategorySerializer,
                           GenreSerializer, TitleWriteSerializer,
@@ -18,7 +20,7 @@ class TitleViewSet(viewsets.ModelViewSet):
     pagination_class = PageNumberPagination
     permission_classes = (AdminOrRead,)
     filter_backends = (DjangoFilterBackend,)
-    filterset_fields = ('category__slug', 'genre__slug', 'name', 'year')
+    filterset_class = TitleFilter
 
     def get_serializer_class(self):
         if self.request.method in ('POST', 'PATCH'):
