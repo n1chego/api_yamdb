@@ -84,24 +84,28 @@ So your first goal is to **Sign Up** and then **Get Token**.
 
 ### Registration and authorization
 
-<p>Send POST to register new user with parameters:<br>
-**email** and **username** to endpoint `/api/v1/auth/signup/`.</p>
+Send POST to register new user with parameters:<br>
+**email** and **username** to endpoint `/api/v1/auth/signup/`.
 
-<p>YaMBD will send you a **confirmation code** on your email.</p>
+YaMBD will send you a **confirmation code** on your email.
 
-<p>Send POST to get a **bearer token** with parameters:<br>
-**username** and **confirmation code** to endpoint `/api/v1/auth/token/`.</p>
+Send POST to get a **bearer token** with parameters:<br>
+**username** and **confirmation code** to endpoint `/api/v1/auth/token/`.
 
-<p>If you wish, you may send PATCH to endpoint `/api/v1/users/me/`<br>
-and update your profile(check parameters in docs).</p>
+If you wish, you may send PATCH to endpoint `/api/v1/users/me/`<br>
+and update your profile(check parameters in docs).
 
 ### Available urls
 
-<p>Titles - `/api/v1/titles/`</p>
-<p>Genres - `/api/v1/genres/`</p>
-<p>Categories - `/api/v1/categories/`</p>
-<p>Reviews - `/api/v1/titles/<title_id>/reviews/`</p>
-<p>Comments - `/api/v1/titles/<title_id>/reviews/<review_id>comments/`</p>
+Titles - `/api/v1/titles/`
+
+Genres - `/api/v1/genres/`
+
+Categories - `/api/v1/categories/`
+
+Reviews - `/api/v1/titles/<title_id>/reviews/`
+
+Comments - `/api/v1/titles/<title_id>/reviews/<review_id>comments/`
 
 ### Documentation
   
