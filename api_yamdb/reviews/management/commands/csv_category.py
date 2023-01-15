@@ -18,5 +18,11 @@ class Command(BaseCommand):
             csv_reader = csv.reader(file, delimiter=',')
             next(csv_reader)
             for row in csv_reader:
-                Category.objects.create(id=int(row[0]),
-                                        name=row[1], slug=row[2],)
+                Category.objects.update_or_create(
+                    id=int(row[0]),
+                    defaults={
+                        'id': int(row[0]),
+                        'name': row[1],
+                        'slug': row[2],
+                    }
+                )

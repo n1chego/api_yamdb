@@ -20,8 +20,9 @@
     <li>
         <a href="#usage">Usage</a>
         <ul>
+            li><a href="registration and authorization">Registration and authorization</a></li>
             <li><a href="#available_urls">Available urls</a></li>
-            <li><a href="#database_requests">Database requests</a></li>
+            <li><a href="#database_requests">Documentation</a></li>
         </ul>
     </li>
     <li><a href="#acknowledgements">Acknowledgements</a></li>
@@ -79,16 +80,32 @@ This is api service, where you can get or create reviews, ratings, comments on t
 
 You may use Postman to create api requests.
 Only auth users can make reviews and leave comments.
-So your first goal is to **Sign Up** and then **Sign In**.
+So your first goal is to **Sign Up** and then **Get Token**.
+
+### Registration and authorization
+
+Send POST to register new user with parameters:
+**email** and **username** to endpoint ```/api/v1/auth/signup/```.
+
+YaMBD will send you a **confirmation code** on your email.
+
+Send POST to get a **bearer token** with parameters:
+**username** and **confirmation code** to endpoint ```/api/v1/auth/token/```.
+
+If you wish, you may send PATCH to endpoint ```/api/v1/users/me/```
+and update your profile(check parameters in docs).
 
 ### Available urls
 
-...
+Titles - ```/api/v1/titles/```
+Genres - ```/api/v1/genres/```
+Categories - ```/api/v1/categories/```
+Reviews - ```/api/v1/titles/<title_id>/reviews/```
+Comments - ```/api/v1/titles/<title_id>/reviews/<review_id>comments/```
 
-### Database requests
+### Documentation
   
 More data and examples available on ```127.0.0.1:8000/redoc/```
-
 
 
 <!-- ACKNOWLEDGEMENTS -->

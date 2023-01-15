@@ -18,5 +18,12 @@ class Command(BaseCommand):
             csv_reader = csv.reader(file, delimiter=',')
             next(csv_reader)
             for row in csv_reader:
-                User.objects.create(id=int(row[0]), username=row[1],
-                                    email=row[2], role=row[3])
+                User.objects.update_or_create(
+                    id=int(row[0]),
+                    defaults={
+                        'id': int(row[0]),
+                        'username': row[1],
+                        'email': row[2],
+                        'role': row[3]
+                    }
+                )

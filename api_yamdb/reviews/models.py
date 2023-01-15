@@ -32,6 +32,7 @@ class Review(models.Model):
                 name='unique_review'
             )
         ]
+        ordering = ('-pub_date',)
 
     def __str__(self):
         return self.text[:10]
@@ -53,6 +54,9 @@ class Comment(models.Model):
         auto_now_add=True,
         db_index=True
     )
+
+    class Meta:
+        ordering = ('-pub_date',)
 
     def __str__(self):
         return self.text[:10]

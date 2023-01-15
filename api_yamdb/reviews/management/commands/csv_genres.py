@@ -17,4 +17,11 @@ class Command(BaseCommand):
             csv_reader = csv.reader(f, delimiter=',')
             next(csv_reader)
             for row in csv_reader:
-                Genre.objects.create(id=int(row[0]), name=row[1], slug=row[2],)
+                Genre.objects.update_or_create(
+                    id=int(row[0]),
+                    defaults={
+                        'id': int(row[0]),
+                        'name': row[1],
+                        'slug': row[2],
+                    }
+                )

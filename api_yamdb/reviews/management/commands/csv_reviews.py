@@ -18,6 +18,14 @@ class Command(BaseCommand):
             csv_reader = csv.reader(f, delimiter=',')
             next(csv_reader)
             for row in csv_reader:
-                Review.objects.create(id=row[0], title_id=int(row[1]),
-                                      text=row[2], author_id=int(row[3]),
-                                      score=int(row[4]), pub_date=row[5])
+                Review.objects.update_or_create(
+                    id=row[0],
+                    defaults={
+                        'id': row[0],
+                        'title_id': int(row[1]),
+                        'text': row[2],
+                        'author_id': int(row[3]),
+                        'score': int(row[4]),
+                        'pub_date': row[5]
+                    }
+                )

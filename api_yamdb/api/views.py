@@ -10,8 +10,8 @@ from .permissions import AdminOrRead, OwnerOrRead
 from .serializers import (CommentSerializer, CategorySerializer,
                           GenreSerializer, TitleWriteSerializer,
                           ReviewSerializer, TitleViewSerializer)
-from titles.models import Category, Genre, Title
 from reviews.models import Comment, Review
+from titles.models import Category, Genre, Title
 
 
 class TitleViewSet(viewsets.ModelViewSet):

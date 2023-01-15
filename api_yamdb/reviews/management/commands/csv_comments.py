@@ -15,6 +15,13 @@ class Command(BaseCommand):
             reader_csv = csv.reader(file, delimiter=',')
             next(reader_csv)
             for row in reader_csv:
-                Comment.objects.create(pk=int(row[0]), review_id=int(row[1]),
-                                       text=row[2], author_id=int(row[3]),
-                                       pub_date=row[4])
+                Comment.objects.update_or_create(
+                    pk=int(row[0]),
+                    defaults={
+                        'pk': int(row[0]),
+                        'review_id': int(row[1]),
+                        'text': row[2],
+                        'author_id': int(row[3]),
+                        'pub_date': row[4]
+                    }
+                )
