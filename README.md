@@ -20,7 +20,7 @@
     <li>
         <a href="#usage">Usage</a>
         <ul>
-            li><a href="registration and authorization">Registration and authorization</a></li>
+            <li><a href="registration and authorization">Registration and authorization</a></li>
             <li><a href="#available_urls">Available urls</a></li>
             <li><a href="#database_requests">Documentation</a></li>
         </ul>
