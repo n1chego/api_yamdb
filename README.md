@@ -15,7 +15,7 @@
       <ul>
         <li><a href="#prerequisites">Prerequisites</a></li>
         <li><a href="#installation">Installation</a></li>
-        <li><a href="#Database-filling-from-CSV">Database filling</a></li>
+        <li><a href="#database-filling-from-csv">Database filling</a></li>
       </ul>
     </li>
     <li>
@@ -23,7 +23,7 @@
         <ul>
             <li><a href="registration-and-authorization">Registration and authorization</a></li>
             <li><a href="#available-urls">Available urls</a></li>
-            <li><a href="#database-requests">Documentation</a></li>
+            <li><a href="#documentation">Documentation</a></li>
         </ul>
     </li>
     <li><a href="#acknowledgements">Acknowledgements</a></li>
@@ -108,54 +108,54 @@ and update your profile(check parameters in docs).
 ### Available urls
 
 <details>
-  <summary>Titles</summary>
+  <summary>Titles</summary><br>
 
   `/api/v1/titles/`
 
   **POST** to make new Title (ADMIN):
 
-    ```sh
-    {
-      "name": "string",
-      "year": 0,
-      "description": "string",
-      "genre": [
-      "string"
-      ],
-      "category": "string"
-    }
-    ```
+  ```sh
+  {
+    "name": "string",
+    "year": 0,
+    "description": "string",
+    "genre": [
+       "string"
+    ],
+    "category": "string"
+  }
+  ```
 </details>
 <details>
-  <summary>Genres</summary>
+  <summary>Genres</summary><br>
 
   `/api/v1/genres/`
 
   **POST** to make new Genre (ADMIN):
 
-    ```sh
-    {
-      "name": "string",
-      "slug": "string"
-    }
-    ```
+  ```sh
+  {
+    "name": "string",
+    "slug": "string"
+  }
+  ```
 </details>
 <details>
-  <summary>Categories</summary>
+  <summary>Categories</summary><br>
 
   `/api/v1/categories/`
 
   **POST** to make new Category (ADMIN):
 
-    ```sh
-    {
-      "name": "string",
-      "slug": "string"
-    }
-    ```
+  ```sh
+  {
+    "name": "string",
+    "slug": "string"
+  }
+  ```
 </details>
 <details>
-  <summary>Reviews</summary>
+  <summary>Reviews</summary><br>
 
   `/api/v1/titles/<title_id>/reviews/`
 
@@ -169,17 +169,18 @@ and update your profile(check parameters in docs).
   ```
 </details>
 <details>
-  <summary>Comments</summary>
+  <summary>Comments</summary><br>
 
   `/api/v1/titles/<title_id>/reviews/<review_id>comments/`
 
-    **POST** to leave Comment (AUTHORIZED):
-
+  **POST** to leave Comment (AUTHORIZED):
+  
   ```sh
   {
     "text": "string"
   }
   ```
+
 </details>
 
 ### Documentation
@@ -197,6 +198,6 @@ More data and examples available on ```127.0.0.1:8000/redoc/```
 
 <!-- DEVELOPED BY -->
 ## Developed by
-Kautarov Maksim - [https://github.com/psevdocoder](https://github.com/psevdocoder)
-Sukonkin Valerii - [https://github.com/Valerii22](https://github.com/Valerii22)
-Tsipichev Sergey - [https://github.com/n1chego](https://github.com/n1chego)
+> Kautarov Maksim - [https://github.com/psevdocoder](https://github.com/psevdocoder)<br>
+> Sukonkin Valerii - [https://github.com/Valerii22](https://github.com/Valerii22)<br>
+> Tsipichev Sergey - [https://github.com/n1chego](https://github.com/n1chego)<br>
