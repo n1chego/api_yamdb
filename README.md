@@ -110,9 +110,10 @@ and update your profile(check parameters in docs).
 <details>
   <summary>Titles</summary>
 
-  Titles - `/api/v1/titles/`
+  `/api/v1/titles/`
 
   **POST** to make new Title (ADMIN):
+
     ```sh
     {
       "name": "string",
@@ -125,35 +126,65 @@ and update your profile(check parameters in docs).
     }
     ```
 </details>
+<details>
+  <summary>Genres</summary>
 
-Genres - `/api/v1/genres/`
+  `/api/v1/genres/`
 
-**POST** to make new Genre (ADMIN):
+  **POST** to make new Genre (ADMIN):
+
+    ```sh
+    {
+      "name": "string",
+      "slug": "string"
+    }
+    ```
+</details>
+<details>
+  <summary>Categories</summary>
+
+  `/api/v1/categories/`
+
+  **POST** to make new Category (ADMIN):
+
+    ```sh
+    {
+      "name": "string",
+      "slug": "string"
+    }
+    ```
+</details>
+<details>
+  <summary>Reviews</summary>
+
+  `/api/v1/titles/<title_id>/reviews/`
+
+  **POST** to make new Review (AUTHORIZED):
+
   ```sh
   {
-    "name": "string",
-    "slug": "string"
+    "text": "string",
+    "score": 1
   }
   ```
+</details>
+<details>
+  <summary>Comments</summary>
 
-Categories - `/api/v1/categories/`
+  `/api/v1/titles/<title_id>/reviews/<review_id>comments/`
 
-**POST** to make new Category (ADMIN):
+    **POST** to leave Comment (AUTHORIZED):
+
   ```sh
   {
-    "name": "string",
-    "slug": "string"
+    "text": "string"
   }
   ```
-
-Reviews - `/api/v1/titles/<title_id>/reviews/`
-
-Comments - `/api/v1/titles/<title_id>/reviews/<review_id>comments/`
+</details>
 
 ### Documentation
   
 More data and examples available on ```127.0.0.1:8000/redoc/```
-
 
 <!-- ACKNOWLEDGEMENTS -->
 ## Acknowledgements
