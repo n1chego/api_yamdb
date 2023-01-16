@@ -15,17 +15,19 @@
       <ul>
         <li><a href="#prerequisites">Prerequisites</a></li>
         <li><a href="#installation">Installation</a></li>
+        <li><a href="#Database-filling-from-CSV">Database filling</a></li>
       </ul>
     </li>
     <li>
         <a href="#usage">Usage</a>
         <ul>
-            <li><a href="registration and authorization">Registration and authorization</a></li>
-            <li><a href="#available_urls">Available urls</a></li>
-            <li><a href="#database_requests">Documentation</a></li>
+            <li><a href="registration-and-authorization">Registration and authorization</a></li>
+            <li><a href="#available-urls">Available urls</a></li>
+            <li><a href="#database-requests">Documentation</a></li>
         </ul>
     </li>
     <li><a href="#acknowledgements">Acknowledgements</a></li>
+    <li><a href="#developed-by">Developed by</a></li>
   </ol>
 </details>
 
@@ -65,6 +67,9 @@ This is api service, where you can get or create reviews, ratings, comments on t
 
 2. Make migrations
   ```sh
+  cd api_yambd/
+  ```
+  ```sh
   python manage.py makemigrations
   ```
   ```sh
@@ -74,6 +79,11 @@ This is api service, where you can get or create reviews, ratings, comments on t
 3. Run server
   ```sh
   python manage.py runserver
+  ```
+
+### Database filling from CSV
+  ```sh
+  python manage.py csv_all
   ```
 
 ## Usage
@@ -97,11 +107,44 @@ and update your profile(check parameters in docs).
 
 ### Available urls
 
-Titles - `/api/v1/titles/`
+<details>
+  <summary>Titles</summary>
+
+  Titles - `/api/v1/titles/`
+
+  **POST** to make new Title (ADMIN):
+    ```sh
+    {
+      "name": "string",
+      "year": 0,
+      "description": "string",
+      "genre": [
+      "string"
+      ],
+      "category": "string"
+    }
+    ```
+</details>
 
 Genres - `/api/v1/genres/`
 
+**POST** to make new Genre (ADMIN):
+  ```sh
+  {
+    "name": "string",
+    "slug": "string"
+  }
+  ```
+
 Categories - `/api/v1/categories/`
+
+**POST** to make new Category (ADMIN):
+  ```sh
+  {
+    "name": "string",
+    "slug": "string"
+  }
+  ```
 
 Reviews - `/api/v1/titles/<title_id>/reviews/`
 
@@ -119,3 +162,10 @@ More data and examples available on ```127.0.0.1:8000/redoc/```
 * [Rest-framework](https://www.django-rest-framework.org/)
 * [SimpleJWT](https://django-rest-framework-simplejwt.readthedocs.io/en/latest/index.html)
 * [Pytest](https://docs.pytest.org/en/7.2.x/)
+
+
+<!-- DEVELOPED BY -->
+## Developed by
+Kautarov Maksim - [https://github.com/psevdocoder](https://github.com/psevdocoder)
+Sukonkin Valerii - [https://github.com/Valerii22](https://github.com/Valerii22)
+Tsipichev Sergey - [https://github.com/n1chego](https://github.com/n1chego)

@@ -1,6 +1,7 @@
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
+from .consts import MAX_SCORE, MIN_SCORE, STR_METHOD_TEXT_LENGTH
 from users.models import User
 from titles.models import Title
 
@@ -18,7 +19,10 @@ class Review(models.Model):
         on_delete=models.CASCADE
     )
     score = models.IntegerField(
-        validators=[MaxValueValidator(10), MinValueValidator(1)]
+        validators=[
+            MaxValueValidator(MAX_SCORE),
+            MinValueValidator(MIN_SCORE)
+        ]
     )
     pub_date = models.DateTimeField(
         auto_now_add=True,
@@ -35,7 +39,7 @@ class Review(models.Model):
         ordering = ('-pub_date',)
 
     def __str__(self):
-        return self.text[:10]
+        return self.text[:STR_METHOD_TEXT_LENGTH]
 
 
 class Comment(models.Model):
@@ -59,4 +63,4 @@ class Comment(models.Model):
         ordering = ('-pub_date',)
 
     def __str__(self):
-        return self.text[:10]
+        return self.text[:STR_METHOD_TEXT_LENGTH]
